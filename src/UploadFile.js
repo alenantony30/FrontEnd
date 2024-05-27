@@ -10,21 +10,19 @@ const handleFile=(event)=>{
 export default function UploadFile() {
    return <div
               className='uploadFile'>
-       <button
-           className='enabledButton'
-           >Download Template</button>
+
        <br/><br/><br/><br/>
 
        <input
            type='file'
            name='file'
            onchange={handleFile}
-           className='fileInput'
+           className='fileInput commonWidth'
                       
            />
       
        <button
-           className='enabledButton'
+           className='enabledButton commonWidth'
            >Upload</button>
    
    </div>
