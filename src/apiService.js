@@ -22,7 +22,7 @@ export const fetchData = async (requestBody) => {
         const url = window.URL.createObjectURL(new Blob([blob]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', 'template.xlsx');
+        link.setAttribute('download', 'Template.xlsx');
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
