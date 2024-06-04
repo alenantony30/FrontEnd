@@ -111,6 +111,7 @@ export default function App() {
           return (
             <div className="commonWidth apiDetails" key={index}>
               <div className="requestResponseErrorComponent">
+
                 {validationMessages[`${index}-requestBody`] &&
                   <div className="error">{validationMessages[`${index}-requestBody`]}</div>}
                 <textarea
@@ -124,6 +125,7 @@ export default function App() {
                 />
               </div>
               <div className="requestResponseErrorComponent">
+
                 {validationMessages[`${index}-responseBody`] &&
                   <div className="error">{validationMessages[`${index}-responseBody`]}</div>}
                 <textarea
@@ -135,6 +137,7 @@ export default function App() {
                   required
                 />
               </div>
+
               <input
                 className="apiName"
                 name="apiName"
