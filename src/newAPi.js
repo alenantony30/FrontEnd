@@ -3,20 +3,52 @@ import './App.css';
 import { fetchData } from './apiService';
 import { useNavigate } from "react-router-dom";
 
-export default function App() {
+const isValidJson = (input) => {
+    try {
+        JSON.parse(input);
+        return true;
+    } catch (e) {
+        return false;
+    }
+};
 
+const isValidXml = (input) => {
+    const parser = new DOMParser();
+    const parsed = parser.parseFromString(input, 'application/xml');
+    return parsed.getElementsByTagName('parsererror').length === 0;
+};
+
+export default function App() {
     const [formFields, setFormFields] = useState([{ apiName: '', requestBody: '', responseBody: '' }]);
     const [product, setProduct] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [validationMessages, setValidationMessages] = useState({});
 
     const navigate = useNavigate();
 
+    const disabled = !formFields.every(field =>
+        field.requestBody.trim() !== '' &&
+        field.responseBody.trim() !== '' &&
+        field.apiName.trim() !== '') || product.trim() === '' || Object.keys(validationMessages).length > 0;
+
+
     const handleFormChange = (event, index) => {
-        console.log(index, event.target.name);
+        const { name, value } = event.target;
         let data = [...formFields];
-        data[index][event.target.name] = event.target.value;
+        data[index][name] = value;
         setFormFields(data);
+
+        let messages = { ...validationMessages };
+        if (name === 'requestBody' || name === 'responseBody') {
+            if (value.trim() === '' || isValidJson(value) || isValidXml(value)) {
+                delete messages[`${index}-${name}`];
+            } else {
+                messages[`${index}-${name}`] = 'Please enter a valid JSON or XML.';
+            }
+        }
+        setValidationMessages(messages);
+        console.log("Validation Messages", validationMessages);
     };
 
     const submit = async (e) => {
@@ -53,16 +85,16 @@ export default function App() {
     };
 
     const removeFields = (index) => {
-        console.log("remove", index);
+        let messages = { ...validationMessages };
+        delete messages[`${index}-requestBody`];
+        delete messages[`${index}-responseBody`];
+        setValidationMessages(messages);
+        console.log("remove", index, "Updated ValidationMessages", validationMessages);
         let data = [...formFields];
         data.splice(index, 1);
         setFormFields(data);
     };
 
-    const disabled = !formFields.every(field =>
-        field.requestBody !== '' &&
-        field.responseBody !== '' &&
-        field.apiName !== '') || product === '';
 
     return (
         <div className='test'>
@@ -80,6 +112,9 @@ export default function App() {
                 {formFields.map((form, index) => {
                     return (
                         <div className="commonWidth apiDetails" key={index}>
+                            {validationMessages[`${index}-requestBody`] &&
+                                <div style={{ color: 'red' }}>{validationMessages[`${index}-requestBody`]}</div>}
+                            <br />
                             <textarea
                                 type="json"
                                 className="requestResponse"
@@ -89,10 +124,13 @@ export default function App() {
                                 value={form.requestBody}
                                 required
                             />
+                            {validationMessages[`${index}-responseBody`] &&
+                                <div style={{ color: 'red' }}>{validationMessages[`${index}-responseBody`]}</div>}
+                            <br />
                             <textarea
                                 className="requestResponse"
                                 name="responseBody"
-                                placeholder="Enter the Response Body (comma-separated values)"
+                                placeholder="Enter the Response Body"
                                 onChange={(event) => handleFormChange(event, index)}
                                 value={form.responseBody}
                                 required

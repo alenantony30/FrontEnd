@@ -3,20 +3,51 @@ import './App.css';
 import { fetchData } from './apiService';
 import { useNavigate } from "react-router-dom";
 
-export default function App() {
+const isValidJson = (input) => {
+  try {
+    JSON.parse(input);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
 
+const isValidXml = (input) => {
+  const parser = new DOMParser();
+  const parsed = parser.parseFromString(input, 'application/xml');
+  return parsed.getElementsByTagName('parsererror').length === 0;
+};
+
+export default function App() {
   const [formFields, setFormFields] = useState([{ apiName: '', requestBody: '', responseBody: '' }]);
   const [product, setProduct] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [validationMessages, setValidationMessages] = useState({});
 
   const navigate = useNavigate();
 
+  const disabled = !formFields.every(field =>
+    field.requestBody.trim() !== '' &&
+    field.responseBody.trim() !== '' &&
+    field.apiName.trim() !== '') || product.trim() === '' || Object.keys(validationMessages).length > 0;
+
   const handleFormChange = (event, index) => {
-    console.log(index, event.target.name);
+    const { name, value } = event.target;
     let data = [...formFields];
-    data[index][event.target.name] = event.target.value;
+    data[index][name] = value;
     setFormFields(data);
+
+    let messages = { ...validationMessages };
+    if (name === 'requestBody' || name === 'responseBody') {
+      if (value.trim() === '' || isValidJson(value) || isValidXml(value)) {
+        delete messages[`${index}-${name}`];
+      } else {
+        messages[`${index}-${name}`] = 'Please enter a valid JSON or XML.';
+      }
+    }
+    setValidationMessages(messages);
+    console.log("Validation Messages", validationMessages);
   };
 
   const submit = async (e) => {
@@ -53,16 +84,15 @@ export default function App() {
   };
 
   const removeFields = (index) => {
-    console.log("remove", index);
+    let messages = { ...validationMessages };
+    delete messages[`${index}-requestBody`];
+    delete messages[`${index}-responseBody`];
+    setValidationMessages(messages);
+    console.log("remove", index, "Updated ValidationMessages", validationMessages);
     let data = [...formFields];
     data.splice(index, 1);
     setFormFields(data);
   };
-
-  const disabled = !formFields.every(field =>
-    field.requestBody !== '' &&
-    field.responseBody !== '' &&
-    field.apiName !== '') || product === '';
 
   return (
     <div className='test'>
@@ -80,23 +110,31 @@ export default function App() {
         {formFields.map((form, index) => {
           return (
             <div className="commonWidth apiDetails" key={index}>
-              <textarea
-                type="json"
-                className="requestResponse"
-                name="requestBody"
-                placeholder="Enter the Request Body"
-                onChange={(event) => handleFormChange(event, index)}
-                value={form.requestBody}
-                required
-              />
-              <textarea
-                className="requestResponse"
-                name="responseBody"
-                placeholder="Enter the Response Body (comma-separated values)"
-                onChange={(event) => handleFormChange(event, index)}
-                value={form.responseBody}
-                required
-              />
+              <div className="requestResponseErrorComponent">
+                {validationMessages[`${index}-requestBody`] &&
+                  <div className="error">{validationMessages[`${index}-requestBody`]}</div>}
+                <textarea
+                  type="json"
+                  className="requestResponse"
+                  name="requestBody"
+                  placeholder="Enter the Request Body"
+                  onChange={(event) => handleFormChange(event, index)}
+                  value={form.requestBody}
+                  required
+                />
+              </div>
+              <div className="requestResponseErrorComponent">
+                {validationMessages[`${index}-responseBody`] &&
+                  <div className="error">{validationMessages[`${index}-responseBody`]}</div>}
+                <textarea
+                  className="requestResponse"
+                  name="responseBody"
+                  placeholder="Enter the Response Body"
+                  onChange={(event) => handleFormChange(event, index)}
+                  value={form.responseBody}
+                  required
+                />
+              </div>
               <input
                 className="apiName"
                 name="apiName"

@@ -3,12 +3,12 @@
 *::before,
 *::after {
   box-sizing: border-box;
-
+  
 }
 
 .uploadFile {
   background: #ffffff;
-
+  
   padding: 0px;
   border-radius: 5px;
   height: 100%;
@@ -16,63 +16,50 @@
 
 .fileInput {
   height: 50px;
-
+  
   font-size: 1rem;
   border-radius: 5px;
-
+  
   background: #ffffff;
   border: 1px solid black;
   color: #000000;
-
+  
 }
 
 .test {
   background: rgb(255, 255, 255);
   border-radius: 10px;
-  padding: 10px;
-  /* Add padding to align inner elements */
+  padding: 10px; /* Add padding to align inner elements */
 }
 
 .bankLogo {
   display: flex;
   justify-content: center;
-
+  
   height: 50px;
 }
 
 .commonWidth {
   width: 100%;
-
-
+ 
+ 
 }
 
 .requestResponse {
   height: 280px;
-  width: 100%;
-  /* Set to 100% for consistency */
+  width: 100%; /* Set to 100% for consistency */
   font-size: 1rem;
   color: black;
-  border-radius: 10px;
-
-}
-
-.requestResponseErrorComponent {
-  height: auto;
-  width: 100%;
-
-  justify-content: space-between;
-  /* Adjusted to fit inner elements */
-  align-items: center;
+  border: 2px solid #ccc;
   border-radius: 10px;
   resize: none;
+  padding: 5px;
   margin: 5px;
-
 }
 
 .apiName {
   height: 25px;
-  width: 100%;
-  /* Set to 100% for consistency */
+  width: 100%; /* Set to 100% for consistency */
   font-size: 1rem;
   color: black;
   border: 2px solid #ccc;
@@ -85,17 +72,13 @@
   background-color: rgba(129, 168, 232, 0.5);
   border-radius: 10px;
   display: flex;
-  justify-content: space-between;
-  /* Adjusted to fit inner elements */
+  justify-content: space-between; /* Adjusted to fit inner elements */
   align-items: center;
-  margin: 10px 0;
-  /* Add margin for spacing */
-  height: auto;
-  /* Adjust height to fit content */
-  width: 100%;
-  /* Ensure full width */
+  margin: 10px 0; /* Add margin for spacing */
+  height: auto; /* Adjust height to fit content */
+  width: 100%; /* Ensure full width */
   padding: 5px;
-
+ 
 }
 
 .removeButton {
@@ -116,22 +99,18 @@
   height: 30px;
   font-size: 1rem;
   border-radius: 5px;
-  margin: 10px 0;
-  /* Add margin for spacing */
-  width: 100%;
-  /* Set to 100% for consistency */
+  margin: 10px 0; /* Add margin for spacing */
+  width: 100%; /* Set to 100% for consistency */
   padding: 5px;
-
+  
 }
 
 .productName {
   height: 30px;
   font-size: 1rem;
   border-radius: 5px;
-  margin: 10px 0;
-  /* Add margin for spacing */
-  width: 100%;
-  /* Set to 100% for consistency */
+  margin: 10px 0; /* Add margin for spacing */
+  width: 100%; /* Set to 100% for consistency */
   padding: 5px;
 }
 
@@ -140,10 +119,8 @@
   height: 30px;
   font-size: 1rem;
   border-radius: 5px;
-  margin: 10px 0;
-  /* Add margin for spacing */
-  width: 100%;
-  /* Set to 100% for consistency */
+  margin: 10px 0; /* Add margin for spacing */
+  width: 100%; /* Set to 100% for consistency */
   padding: 5px;
 }
 
@@ -174,13 +151,4 @@ body {
 
 h1 {
   font-size: 1.5rem;
-}
-
-
-.error {
-  color: red;
-  margin-bottom: 5px;
-  width: 100%;
-  text-align: left;
-
 }
