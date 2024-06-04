@@ -30,6 +30,7 @@
   background: rgb(255, 255, 255);
   border-radius: 10px;
   padding: 10px;
+ 
   /* Add padding to align inner elements */
 }
 
@@ -53,6 +54,7 @@
   font-size: 1rem;
   color: black;
   border-radius: 10px;
+  resize: none;
 
 }
 
