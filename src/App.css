@@ -71,6 +71,18 @@
 
 }
 
+.productName {
+  height: 30px;
+  font-size: 1rem;
+  border-radius: 5px;
+  margin: 10px 0;
+  /* Add margin for spacing */
+  width: 100%;
+  /* Set to 100% for consistency */
+  padding: 5px;
+  
+}
+
 .apiName {
   height: 25px;
   width: 100%;
@@ -126,16 +138,7 @@
 
 }
 
-.productName {
-  height: 30px;
-  font-size: 1rem;
-  border-radius: 5px;
-  margin: 10px 0;
-  /* Add margin for spacing */
-  width: 100%;
-  /* Set to 100% for consistency */
-  padding: 5px;
-}
+
 
 .enabledButton,
 .disabledButton {

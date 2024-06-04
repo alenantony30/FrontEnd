@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import './App.css';
 import { fetchData } from './apiService';
 import { useNavigate } from "react-router-dom";
+import Popup from 'reactjs-popup';
 
 const isValidJson = (input) => {
   try {
@@ -70,7 +71,8 @@ export default function App() {
       console.log(result);
       navigate("/uploadFile");
     } catch (error) {
-      console.error('Server is not responding', error);
+      alert("Server is not responding, Please try later")
+      console.error('Server is not responding, Please try later', error);
       setError('Failed to load');
     } finally {
       setLoading(false);
@@ -167,7 +169,6 @@ export default function App() {
           disabled={disabled || loading}
         >Download Template with Data</button>
       </form>
-      {error && <p>{error}</p>}
     </div>
   );
 }
