@@ -57,7 +57,7 @@ export default function App() {
     const apiList = formFields.map(field => ({
       apiName: field.apiName,
       requestBody: field.requestBody,
-      responseBody: field.responseBody.split(',').map(item => item.trim()) // Convert responseBody to array
+      responseBody: [field.responseBody]//.split(',').map(item => item.trim()) // Convert responseBody to array
     }));
 
     const formData = { productName: product, apiList };
