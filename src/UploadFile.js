@@ -1,30 +1,70 @@
-import React, { useState } from "react";
-import './App.css';
+import React, { useContext, useEffect, useState } from 'react';
+import { StepperContext } from './StepperContext';
+import Stepper from './Stepper';
+import './App.css'; // Importing the same CSS used in App
 
-const handleFile=(event)=>{
+const UploadFile = () => {
+  const { steps, currentStep, setCurrentStep } = useContext(StepperContext);
+  const [file, setFile] = useState(null);
 
-   // setFile(event.target.files[0]);
-    
-}
+  useEffect(() => {
+    setCurrentStep(1); // Set initial step to 'API Details'
+  }, [setCurrentStep]);
 
-export default function UploadFile() {
-   return <div
-              className='uploadFile'>
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
 
-       <br/><br/><br/><br/>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('file', file);
 
-       <input
-           type='file'
-           name='file'
-           onchange={handleFile}
-           className='fileInput commonWidth'
-                      
-           />
+    const apiUrl = process.env.REACT_APP_API_HOSTNAME;
+
+    try {
+      const response = await fetch(`${apiUrl}/api`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'response.json';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+
+        // Move to the next step
+        setCurrentStep((prevStep) => Math.min(prevStep + 1, steps.length - 1));
+      } else {
+        console.error('File upload failed', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  return (
+    <div className='test'>
+      <Stepper steps={steps} currentStep={currentStep} />
+      <form className="form" onSubmit={handleSubmit}>
+        <input type="file" onChange={handleFileChange} />
+        <button style={{backgroundColor:"#014c92", width:"33%", height:"30px", color:"#ffffff"}} type="submit" >Download APIDEF</button>
+      </form>
+      <div className="additionalButtons">
+        <span>or</span>
+        <button className="rightButton">Submit APIDEF</button>
       
-       <button
-           className='enabledButton commonWidth'
-           >Upload</button>
-   
-   </div>
-  // return <div>Upload Page</div>
-}
+        <button className="leftButton">Download RawData</button>
+        <button className="leftButton">Download IndexData</button>
+      </div>
+    </div>
+  );
+};
+
+export default UploadFile;

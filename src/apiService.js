@@ -1,8 +1,8 @@
-const APPLICATION_URL = 'http://localhost:8080/api/1';
+const APPLICATION_URL = process.env.REACT_APP_API_HOSTNAME;
 export const fetchData = async (requestBody) => {
     console.log("body is " + JSON.stringify(requestBody));
 
-    const response = await fetch(`${APPLICATION_URL}`, {
+    const response = await fetch(`${APPLICATION_URL}/api/1`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

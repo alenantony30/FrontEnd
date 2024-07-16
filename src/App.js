@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import './App.css';
 import { fetchData } from './apiService';
 import { useNavigate } from "react-router-dom";
-import Popup from 'reactjs-popup';
+import { MdDeleteForever } from "react-icons/md";
+import Stepper from './Stepper';
+import { StepperContext } from './StepperContext';
 
 const isValidJson = (input) => {
   try {
@@ -20,35 +22,44 @@ const isValidXml = (input) => {
 };
 
 export default function App() {
-  const [formFields, setFormFields] = useState([{ apiName: '', requestBody: '', responseBody: '' }]);
+  const [formFields, setFormFields] = useState([{ apiName: '', requestBody: '', responseBody: [''] }]);
   const [product, setProduct] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [validationMessages, setValidationMessages] = useState({});
+  const { steps, currentStep, setCurrentStep } = useContext(StepperContext);
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    setCurrentStep(0); // Set initial step to 'Product Details'
+  }, [setCurrentStep]);
+
   const disabled = !formFields.every(field =>
     field.requestBody.trim() !== '' &&
-    field.responseBody.trim() !== '' &&
+    field.responseBody.every(rb => rb.trim() !== '') &&
     field.apiName.trim() !== '') || product.trim() === '' || Object.keys(validationMessages).length > 0;
 
-  const handleFormChange = (event, index) => {
+  const handleFormChange = (event, index, rbIndex = null) => {
     const { name, value } = event.target;
     let data = [...formFields];
-    data[index][name] = value;
+    if (rbIndex !== null) {
+      data[index].responseBody[rbIndex] = value;
+    } else {
+      data[index][name] = value;
+    }
     setFormFields(data);
 
     let messages = { ...validationMessages };
-    if (name === 'requestBody' || name === 'responseBody') {
+    if (name === 'requestBody' || rbIndex !== null) {
+      const key = rbIndex !== null ? `${index}-responseBody-${rbIndex}` : `${index}-requestBody`;
       if (value.trim() === '' || isValidJson(value) || isValidXml(value)) {
-        delete messages[`${index}-${name}`];
+        delete messages[key];
       } else {
-        messages[`${index}-${name}`] = 'Please enter a valid JSON or XML.';
+        messages[key] = 'Please enter a valid JSON or XML.';
       }
     }
     setValidationMessages(messages);
-    console.log("Validation Messages", validationMessages);
   };
 
   const submit = async (e) => {
@@ -57,21 +68,20 @@ export default function App() {
     const apiList = formFields.map(field => ({
       apiName: field.apiName,
       requestBody: field.requestBody,
-      responseBody: [field.responseBody]//.split(',').map(item => item.trim()) // Convert responseBody to array
+      responseBody: field.responseBody
     }));
 
     const formData = { productName: product, apiList };
-    console.log("submit", formData);
 
     setLoading(true);
     setError(null);
 
     try {
       const result = await fetchData(formData);
-      console.log(result);
+      setCurrentStep((prevStep) => Math.min(prevStep + 1, steps.length - 1)); // Move to the next step
       navigate("/uploadFile");
     } catch (error) {
-      alert("Server is not responding, Please try later")
+      alert("Server is not responding, Please try later");
       console.error('Server is not responding, Please try later', error);
       setError('Failed to load');
     } finally {
@@ -80,24 +90,48 @@ export default function App() {
   };
 
   const addFields = () => {
-    let object = { apiName: '', requestBody: '', responseBody: '' };
+    let object = { apiName: '', requestBody: '', responseBody: [''] };
     setFormFields([...formFields, object]);
-    console.log("add", formFields);
   };
 
   const removeFields = (index) => {
     let messages = { ...validationMessages };
     delete messages[`${index}-requestBody`];
-    delete messages[`${index}-responseBody`];
+    formFields[index].responseBody.forEach((_, rbIndex) => {
+      delete messages[`${index}-responseBody-${rbIndex}`];
+    });
     setValidationMessages(messages);
-    console.log("remove", index, "Updated ValidationMessages", validationMessages);
     let data = [...formFields];
     data.splice(index, 1);
     setFormFields(data);
   };
 
+  const addResponseBody = (index) => {
+    let data = [...formFields];
+    data[index].responseBody.push('');
+    setFormFields(data);
+  };
+
+  const removeResponseBody = (index, rbIndex) => {
+    let messages = { ...validationMessages };
+    delete messages[`${index}-responseBody-${rbIndex}`];
+    setValidationMessages(messages);
+    let data = [...formFields];
+    data[index].responseBody.splice(rbIndex, 1);
+    setFormFields(data);
+  };
+
+  const nextStep = () => {
+    setCurrentStep((prevStep) => Math.min(prevStep + 1, steps.length - 1));
+  };
+
+  const prevStep = () => {
+    setCurrentStep((prevStep) => Math.max(prevStep - 1, 0));
+  };
+
   return (
     <div className='test'>
+      <Stepper steps={steps} currentStep={currentStep} />
       <label className="commonWidth productName">Product Name</label>
       <br />
       <input
@@ -126,19 +160,33 @@ export default function App() {
                   required
                 />
               </div>
-              <div className="requestResponseErrorComponent">
 
-                {validationMessages[`${index}-responseBody`] &&
-                  <div className="error">{validationMessages[`${index}-responseBody`]}</div>}
-                <textarea
-                  className="requestResponse"
-                  name="responseBody"
-                  placeholder="Enter the Response Body"
-                  onChange={(event) => handleFormChange(event, index)}
-                  value={form.responseBody}
-                  required
-                />
-              </div>
+              {form.responseBody.map((response, rbIndex) => (
+                <div key={rbIndex} className="requestResponseErrorComponent">
+                  {validationMessages[`${index}-responseBody-${rbIndex}`] &&
+                    <div className="error">{validationMessages[`${index}-responseBody-${rbIndex}`]}</div>}
+                  <textarea
+                    className="requestResponse"
+                    name="responseBody"
+                    placeholder="Enter the Response Body"
+                    onChange={(event) => handleFormChange(event, index, rbIndex)}
+                    value={response}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="removeResponseButton"
+                    onClick={() => removeResponseBody(index, rbIndex)}
+                    disabled={form.responseBody.length === 1}
+                  >Remove</button>
+                </div>
+              ))}
+
+              <button
+                type="button"
+                className="addResponseButton"
+                onClick={() => addResponseBody(index)}
+              >Add Response Body</button>
 
               <input
                 className="apiName"
@@ -148,12 +196,12 @@ export default function App() {
                 value={form.apiName}
                 required
               />
-              <button
+              <MdDeleteForever 
                 type="button"
-                className="removeButton"
+                size={"70"}
                 onClick={() => removeFields(index)}
                 disabled={formFields.length === 1}
-              >x</button>
+              ></MdDeleteForever>
             </div>
           );
         })}
