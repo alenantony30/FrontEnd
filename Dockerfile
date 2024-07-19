@@ -12,8 +12,6 @@ RUN npm install
 # Copy the rest of the application files to the working directory
 COPY . .
 
-ARG REACT_APP_API_HOSTNAME
-ENV REACT_APP_API_HOSTNAME=$REACT_APP_API_HOSTNAME
 
 # Build the React application
 RUN npm run build

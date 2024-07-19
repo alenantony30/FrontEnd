@@ -196,11 +196,15 @@ export default function App() {
                 value={form.apiName}
                 required
               />
-              <MdDeleteForever 
+              <MdDeleteForever
                 type="button"
                 size={"70"}
                 onClick={() => removeFields(index)}
                 disabled={formFields.length === 1}
+                style={
+                  { cursor: formFields.length === 1 ? 'not-allowed' : 'pointer',
+                     opacity: formFields.length === 1 ? 0.5 : 1 }
+                }
               ></MdDeleteForever>
             </div>
           );

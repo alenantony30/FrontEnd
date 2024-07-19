@@ -20,7 +20,7 @@ const UploadFile = () => {
     const formData = new FormData();
     formData.append('file', file);
 
-    const apiUrl = process.env.REACT_APP_API_HOSTNAME;
+    const apiUrl = window.REACT_APP_API_URL;
 
     try {
       const response = await fetch(`${apiUrl}/api`, {

@@ -1,4 +1,4 @@
-const APPLICATION_URL = process.env.REACT_APP_API_HOSTNAME;
+const APPLICATION_URL = window.REACT_APP_API_URL;
 export const fetchData = async (requestBody) => {
     console.log("body is " + JSON.stringify(requestBody));
 
