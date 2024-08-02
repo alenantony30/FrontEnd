@@ -29,7 +29,8 @@
 .test {
   background: rgb(255, 255, 255);
   border-radius: 10px;
-  padding: 10px;
+  padding: 30px;
+  
  
   /* Add padding to align inner elements */
 }
@@ -114,7 +115,8 @@
 
 .removeButton {
   border-radius: 20px;
-  background-color: rgb(255, 51, 51);
+  background-color: rgb(225, 220, 220);
+  
   height: 20px;
   width: 20px;
   display: flex;
@@ -189,3 +191,49 @@ h1 {
   text-align: left;
 
 }
+
+.stepper {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.step {
+  padding: 10px;
+  border-bottom: 2px solid #ccc;
+  cursor: pointer;
+}
+
+.step.active {
+  font-weight: bold;
+  border-bottom: 2px solid #000;
+}
+
+.additionalButtons {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  
+}
+
+.additionalButtons button {
+  margin: 0 10px;
+  width: 20%;
+  background: #014c92;
+  color: #ffffff;
+  height: 30px;
+
+}
+
+.additionalButtons .rightButton {
+  margin-left: 10px;
+  width: 20%;
+  background: #014c92;
+  color: #ffffff;
+  height: 30px;
+}
+
+.additionalButtons .leftButton {
+  margin: 0 10px;
+}
+

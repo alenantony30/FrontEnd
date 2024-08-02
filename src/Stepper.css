@@ -1,0 +1,42 @@
+/* src/components/Stepper.css */
+
+.stepper {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .step-number {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+  }
+  
+  .step.active .step-number {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .step-label {
+    font-size: 12px;
+    color: #555;
+  }
+  
+  .step.active .step-label {
+    font-weight: bold;
+    color: #000;
+  }
+  
