@@ -164,20 +164,20 @@ export default function App() {
                   {validationMessages[`${index}-responseBody-${rbIndex}`] &&
                     <div className="error">{validationMessages[`${index}-responseBody-${rbIndex}`]}</div>}
                   <div className="textarea-container">
-                  <textarea
-                    className="response"
-                    name="responseBody"
-                    placeholder="Enter the Response Body"
-                    onChange={(event) => handleFormChange(event, index, rbIndex)}
-                    value={response}
-                    required
-                  />
-                  <button
-                    type="button"
-                    className={(form.responseBody.length === 1)?"disabledRemoveResponseButton":"removeResponseButton"}
-                    onClick={() => removeResponseBody(index, rbIndex)}
-                    disabled={form.responseBody.length === 1}
-                  >  &times;</button>
+                    <textarea
+                      className="response"
+                      name="responseBody"
+                      placeholder="Enter the Response Body"
+                      onChange={(event) => handleFormChange(event, index, rbIndex)}
+                      value={response}
+                      required
+                    />
+                    <button
+                      type="button"
+                      className={(form.responseBody.length === 1) ? "disabledRemoveResponseButton" : "removeResponseButton"}
+                      onClick={() => removeResponseBody(index, rbIndex)}
+                      disabled={form.responseBody.length === 1}
+                    >  &times;</button>
                   </div>
 
                 </div>
@@ -198,11 +198,19 @@ export default function App() {
               <MdDeleteForever
                 type="button"
                 size={"70"}
-                onClick={() => removeFields(index)}
+                onClick={() => {
+                  if (formFields.length > 1) {
+                    removeFields(index)
+                  }
+                }
+
+                }
                 disabled={formFields.length === 1}
                 style={
-                  { cursor: formFields.length === 1 ? 'not-allowed' : 'pointer',
-                     opacity: formFields.length === 1 ? 0.5 : 1 }
+                  {
+                    cursor: formFields.length === 1 ? 'not-allowed' : 'pointer',
+                    opacity: formFields.length === 1 ? 0.5 : 1
+                  }
                 }
               ></MdDeleteForever>
             </div>

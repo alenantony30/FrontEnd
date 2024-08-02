@@ -21,7 +21,7 @@
   border-radius: 5px;
 
   background: #ffffff;
-  border: 1px solid black;
+ 
   color: #000000;
 
 }
@@ -195,6 +195,20 @@
 
 }
 
+.defaultButton{
+  background: #014c92;
+  color: #ffffff;
+  height: auto;
+  font-size: 1rem;
+  border-radius: 5px;
+  margin: 10px 0;
+  /* Add margin for spacing */
+  width: auto;
+  /* Set to 100% for consistency */
+  padding: 5px;
+
+}
+
 
 
 .enabledButton,
@@ -207,6 +221,14 @@
   width: 100%;
   /* Set to 100% for consistency */
   padding: 5px;
+}
+
+.small-button {
+  font-size: 0.875rem; /* Smaller font size */
+  padding: 5px 10px; /* Less padding */
+  margin: 5px; /* Smaller margin */
+  width: 200px; /* Auto width for smaller button */
+  border-radius: 5px; /* Consistent border radius */
 }
 
 .enabledButton {
@@ -287,9 +309,23 @@ h1 {
   color: #ffffff;
   height: 30px;
 }
-
+test
 
 .additionalButtons .leftButton {
   margin: 0 10px;
 }
+
+
+
+
+
+.enabledButton:hover,
+.addResponseButton:hover,
+.addButton:hover
+{
+  
+  background: #4892d6;
+  cursor: pointer;
+}
+
 

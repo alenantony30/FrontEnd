@@ -52,7 +52,7 @@ const UploadFile = () => {
       <Stepper steps={steps} currentStep={currentStep} />
       <form className="form" onSubmit={handleSubmit}>
         <input type="file" onChange={handleFileChange} />
-        <button style={{backgroundColor:"#014c92", width:"33%", height:"30px", color:"#ffffff"}} type="submit" >Download APIDEF</button>
+        <button className='enabledButton small-button' type="submit" >Submit APIDEF</button>
       </form>
     </div>
   );
