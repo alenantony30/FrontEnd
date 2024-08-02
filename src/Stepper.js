@@ -12,6 +12,8 @@ const Stepper = ({ steps, currentStep }) => {
       navigate('/uploadFile');
     } else if (index === 2) {
       navigate('/final');
+    } else if (index === 3) {
+      navigate('/overwriteData');
     }
   };
 

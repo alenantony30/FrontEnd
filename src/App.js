@@ -79,7 +79,7 @@ export default function App() {
     try {
       const result = await fetchData(formData);
       setCurrentStep((prevStep) => Math.min(prevStep + 1, steps.length - 1)); // Move to the next step
-      navigate("/upload");
+      navigate("/uploadFile");
     } catch (error) {
       alert("Server is not responding, Please try later");
       console.error('Server is not responding, Please try later', error);
