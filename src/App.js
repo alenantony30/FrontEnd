@@ -147,7 +147,6 @@ export default function App() {
           return (
             <div className="commonWidth apiDetails" key={index}>
               <div className="requestResponseErrorComponent">
-
                 {validationMessages[`${index}-requestBody`] &&
                   <div className="error">{validationMessages[`${index}-requestBody`]}</div>}
                 <textarea
@@ -160,7 +159,6 @@ export default function App() {
                   required
                 />
               </div>
-
               {form.responseBody.map((response, rbIndex) => (
                 <div key={rbIndex} className="requestResponseErrorComponent">
                   {validationMessages[`${index}-responseBody-${rbIndex}`] &&
@@ -184,13 +182,11 @@ export default function App() {
 
                 </div>
               ))}
-
               <button
                 type="button"
                 className="addResponseButton"
                 onClick={() => addResponseBody(index)}
               >Add Response Body</button>
-
               <input
                 className="apiName"
                 name="apiName"
@@ -202,18 +198,11 @@ export default function App() {
               <MdDeleteForever
                 type="button"
                 size={"70"}
-                onClick={() => {
-                  if (formFields.length > 1) {
-                    console.log("delete");
-                    removeFields(index)
-                  }
-                }
-                }
+                onClick={() => removeFields(index)}
+                disabled={formFields.length === 1}
                 style={
-                  {
-                    cursor: formFields.length === 1 ? 'not-allowed' : 'pointer',
-                    opacity: formFields.length === 1 ? 0.5 : 1
-                  }
+                  { cursor: formFields.length === 1 ? 'not-allowed' : 'pointer',
+                     opacity: formFields.length === 1 ? 0.5 : 1 }
                 }
               ></MdDeleteForever>
             </div>

@@ -293,31 +293,3 @@ h1 {
   margin: 0 10px;
 }
 
-
-.rightButton:hover {
-  background: #3a75b1;
-  cursor: pointer;
-}
-
-.leftButton:hover {
-  background: #3a75b1;
-  cursor: pointer;
-}
-
-.addButton:hover {
-  background: #3a75b1;
-  cursor: pointer;
-}
-
-.enabledButton:hover {
-  background: #3a75b1;
-  cursor: pointer;
-
-}
-
-.addResponseButton:hover{
-
-  background: #3a75b1;
-  cursor: pointer;
-
-}

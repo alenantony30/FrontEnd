@@ -20,10 +20,8 @@ const UploadFile = () => {
     const formData = new FormData();
     formData.append('file', file);
 
-    const apiUrl = window.REACT_APP_API_URL;
-
     try {
-      const response = await fetch(`${apiUrl}/api`, {
+      const response = await fetch('http://localhost:8080/api/2', {
         method: 'POST',
         body: formData,
       });
@@ -33,7 +31,7 @@ const UploadFile = () => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'response.json';
+        a.download = 'apidef.json';
         document.body.appendChild(a);
         a.click();
         a.remove();
@@ -54,15 +52,8 @@ const UploadFile = () => {
       <Stepper steps={steps} currentStep={currentStep} />
       <form className="form" onSubmit={handleSubmit}>
         <input type="file" onChange={handleFileChange} />
-        <button className="leftButton" style={{backgroundColor:"#014c92", width:"33%", height:"30px", color:"#ffffff"}} type="submit" >Download APIDEF</button>
+        <button style={{backgroundColor:"#014c92", width:"33%", height:"30px", color:"#ffffff"}} type="submit" >Download APIDEF</button>
       </form>
-      <div className="additionalButtons">
-        <span>or</span>
-        <button className="rightButton">Submit APIDEF</button>
-      
-        <button className="leftButton">Download RawData</button>
-        <button className="leftButton">Download IndexData</button>
-      </div>
     </div>
   );
 };
