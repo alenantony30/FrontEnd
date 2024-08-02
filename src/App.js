@@ -165,8 +165,9 @@ export default function App() {
                 <div key={rbIndex} className="requestResponseErrorComponent">
                   {validationMessages[`${index}-responseBody-${rbIndex}`] &&
                     <div className="error">{validationMessages[`${index}-responseBody-${rbIndex}`]}</div>}
+                  <div className="textarea-container">
                   <textarea
-                    className="requestResponse"
+                    className="response"
                     name="responseBody"
                     placeholder="Enter the Response Body"
                     onChange={(event) => handleFormChange(event, index, rbIndex)}
@@ -175,10 +176,12 @@ export default function App() {
                   />
                   <button
                     type="button"
-                    className="removeResponseButton"
+                    className={(form.responseBody.length === 1)?"disabledRemoveResponseButton":"removeResponseButton"}
                     onClick={() => removeResponseBody(index, rbIndex)}
                     disabled={form.responseBody.length === 1}
-                  >Remove</button>
+                  >  &times;</button>
+                  </div>
+
                 </div>
               ))}
 
@@ -199,11 +202,18 @@ export default function App() {
               <MdDeleteForever
                 type="button"
                 size={"70"}
-                onClick={() => removeFields(index)}
-                disabled={formFields.length === 1}
+                onClick={() => {
+                  if (formFields.length > 1) {
+                    console.log("delete");
+                    removeFields(index)
+                  }
+                }
+                }
                 style={
-                  { cursor: formFields.length === 1 ? 'not-allowed' : 'pointer',
-                     opacity: formFields.length === 1 ? 0.5 : 1 }
+                  {
+                    cursor: formFields.length === 1 ? 'not-allowed' : 'pointer',
+                    opacity: formFields.length === 1 ? 0.5 : 1
+                  }
                 }
               ></MdDeleteForever>
             </div>
