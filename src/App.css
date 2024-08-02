@@ -237,3 +237,15 @@ h1 {
   margin: 0 10px;
 }
 
+.small-button {
+  font-size: 0.875rem; /* Smaller font size */
+  padding: 5px 10px; /* Less padding */
+  margin: 5px; /* Smaller margin */
+  width: auto; /* Auto width for smaller button */
+  border-radius: 5px; /* Consistent border radius */
+}
+
+.fileInput {
+  display: block;
+  
+}

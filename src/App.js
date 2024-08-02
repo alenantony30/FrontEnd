@@ -79,7 +79,7 @@ export default function App() {
     try {
       const result = await fetchData(formData);
       setCurrentStep((prevStep) => Math.min(prevStep + 1, steps.length - 1)); // Move to the next step
-      navigate("/uploadFile");
+      navigate("/upload");
     } catch (error) {
       alert("Server is not responding, Please try later");
       console.error('Server is not responding, Please try later', error);
@@ -147,7 +147,6 @@ export default function App() {
           return (
             <div className="commonWidth apiDetails" key={index}>
               <div className="requestResponseErrorComponent">
-
                 {validationMessages[`${index}-requestBody`] &&
                   <div className="error">{validationMessages[`${index}-requestBody`]}</div>}
                 <textarea
@@ -160,7 +159,6 @@ export default function App() {
                   required
                 />
               </div>
-
               {form.responseBody.map((response, rbIndex) => (
                 <div key={rbIndex} className="requestResponseErrorComponent">
                   {validationMessages[`${index}-responseBody-${rbIndex}`] &&
@@ -181,13 +179,11 @@ export default function App() {
                   >Remove</button>
                 </div>
               ))}
-
               <button
                 type="button"
                 className="addResponseButton"
                 onClick={() => addResponseBody(index)}
               >Add Response Body</button>
-
               <input
                 className="apiName"
                 name="apiName"
@@ -201,10 +197,6 @@ export default function App() {
                 size={"70"}
                 onClick={() => removeFields(index)}
                 disabled={formFields.length === 1}
-                style={
-                  { cursor: formFields.length === 1 ? 'not-allowed' : 'pointer',
-                     opacity: formFields.length === 1 ? 0.5 : 1 }
-                }
               ></MdDeleteForever>
             </div>
           );
