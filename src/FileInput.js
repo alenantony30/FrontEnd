@@ -10,6 +10,7 @@ const FileInput = () => {
   const handleOnChange = (event) => {
     if (event.target.files && event.target.files.length > 0) {
       setSelectedFile(event.target.files[0]);
+      console.log("Upload file onChange "+event.target.files[0].name );
     }
   };
 

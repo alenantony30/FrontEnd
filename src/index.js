@@ -10,6 +10,11 @@ import Final from './Final';
 import OverwriteData from './OverwriteData'; // Import the new OverwriteData component
 import { StepperProvider } from './StepperContext';
 
+const link = document.createElement('link');
+link.href = 'https://fonts.googleapis.com/icon?family=Material+Icons';
+link.rel = 'stylesheet';
+document.head.appendChild(link);
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
