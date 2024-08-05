@@ -7,7 +7,7 @@ const OverwriteData = () => {
   const { steps, currentStep, setCurrentStep } = useContext(StepperContext);
   const [fileUpdateRaw, setFileUpdateRaw] = useState(null);
   const [fileUpdateIndexData, setFileUpdateIndexData] = useState(null);
-  
+
   useEffect(() => {
     setCurrentStep(3); // Set initial step
   }, [setCurrentStep]);
@@ -81,15 +81,21 @@ const OverwriteData = () => {
   return (
     <div className='test'>
       <Stepper steps={steps} currentStep={currentStep} />
-      <h2>Overwrite Data</h2>
-      <form className="form" onSubmit={handleUpdateRawData}>
-        <input type="file" onChange={handleFileChangeUpdateRaw} className="fileInput" />
-        <button className="enabledButton small-button" type="submit">Update Raw Data</button>
-      </form>
-      <form className="form" onSubmit={handleUpdateIndexData}>
-        <input type="file" onChange={handleFileChangeUpdateIndexData} className="fileInput" />
-        <button className="enabledButton small-button" type="submit">Update Index Data</button>
-      </form>
+      <div className="main-compontents">
+        <div className="form">
+          <form className="form" onSubmit={handleUpdateRawData}>
+            <input type="file" onChange={handleFileChangeUpdateRaw} className="fileInput" />
+            <button className="enabledButton small-button" type="submit">Update Raw Data</button>
+          </form>
+        </div>
+        <br />
+        <div className="form">
+          <form className="form" onSubmit={handleUpdateIndexData}>
+            <input type="file" onChange={handleFileChangeUpdateIndexData} className="fileInput" />
+            <button className="enabledButton small-button" type="submit">Update Index Data</button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };

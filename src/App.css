@@ -21,9 +21,12 @@
   border-radius: 5px;
 
   background: #ffffff;
+  border: 1px solid black;
  
   color: #000000;
-
+  padding: 5px;
+  padding-left: 50px;
+  padding-top: 10px;
 }
 
 .test {
@@ -223,7 +226,7 @@
   padding: 5px;
 }
 
-.small-button {
+.small-button, #file-upload-button {
   font-size: 0.875rem; /* Smaller font size */
   padding: 5px 10px; /* Less padding */
   margin: 5px; /* Smaller margin */
@@ -328,4 +331,17 @@ test
   cursor: pointer;
 }
 
+.main-compontents{
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  flex-direction: column;
+}
+
+.button-group{
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+
+}
 

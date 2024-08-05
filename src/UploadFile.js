@@ -2,6 +2,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { StepperContext } from './StepperContext';
 import Stepper from './Stepper';
 import './App.css'; // Importing the same CSS used in App
+import FileInput from './FileInput'
+
+
+        
 
 const UploadFile = () => {
   const { steps, currentStep, setCurrentStep } = useContext(StepperContext);
@@ -50,10 +54,15 @@ const UploadFile = () => {
   return (
     <div className='test'>
       <Stepper steps={steps} currentStep={currentStep} />
-      <form className="form" onSubmit={handleSubmit}>
-        <input type="file" onChange={handleFileChange} />
-        <button className='enabledButton small-button' type="submit" >Submit APIDEF</button>
-      </form>
+      <div className='main-compontents'>
+        <form className="form" onSubmit={handleSubmit}>
+          <input type="file" className='fileInput' onChange={handleFileChange} />
+          <button className='enabledButton small-button' type="submit" >Submit API Def</button>
+        </form>
+
+        
+        
+      </div>
     </div>
   );
 };
