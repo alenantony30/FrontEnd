@@ -80,7 +80,7 @@ const Final = () => {
       <div className="button-group">
         <button className="enabledButton small-button" onClick={handleDownloadRawData}>Download Raw Data</button>
         <button className="enabledButton small-button" onClick={handleDownloadIndexData}>Download Index Data</button>
-        <button className="enabledButton small-button" onClick={handleDownloadAPIDef}>Download API Def</button>
+        <button className="enabledButton small-button" onClick={handleDownloadAPIDef}>Download API DEF</button>
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ import './App.css'; // Importing the same CSS used in App
 const UploadFile = () => {
   const { steps, currentStep, setCurrentStep } = useContext(StepperContext);
   const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setCurrentStep(1); // Set initial step to 'API Details'
@@ -29,7 +30,8 @@ const UploadFile = () => {
   };
 
   const handleSubmit = async (e) => {
-    console.log("file subitted ----> "+file.name)
+    setLoading(true);
+    console.log("file subitted ----> " + file.name + "loading " + loading);
     e.preventDefault();
     const formData = new FormData();
     formData.append('file', file);
@@ -59,6 +61,7 @@ const UploadFile = () => {
     } catch (error) {
       console.error('Error:', error);
     }
+    setLoading(false);
   };
 
   return (
@@ -73,19 +76,19 @@ const UploadFile = () => {
               style={{ display: 'none' }}
               onChange={handleFileChange}
             />
-            {(!file)? 
-            
-            <div>
-            <img className='bankLogo' src={exampleImage} alt="Example" />
-            <br/>
-            <a>Upload File</a>
-             </div>           
-            :
-            
-            <span>{file.name}</span>}
+            {(!file) ?
+
+              <div>
+                <img className='bankLogo' src={exampleImage} alt="Example" />
+                <br />
+                <a>Upload File</a>
+              </div>
+              :
+
+              <span>{file.name}</span>}
           </div>
-          <button disabled={!file}
-           className={(!file)?'disabledButton small-button':'enabledButton small-button'} type="submit">Submit API Def</button>
+          <button disabled={(!file) || loading}
+            className={((!file)||loading) ? 'disabledButton small-button' : 'enabledButton small-button'} type="submit">Submit API DEF</button>
         </form>
       </div>
     </div>
