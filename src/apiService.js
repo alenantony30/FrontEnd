@@ -1,5 +1,5 @@
-const APPLICATION_URL = window.REACT_APP_API_URL;
-//const APPLICATION_URL = 'http://localhost:8080/'
+//const APPLICATION_URL = window.REACT_APP_API_URL;
+const APPLICATION_URL = 'http://localhost:8080'
 export const fetchData = async (requestBody) => {
     console.log("body is " + JSON.stringify(requestBody));
 

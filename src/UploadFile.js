@@ -3,11 +3,13 @@ import { StepperContext } from './StepperContext';
 import Stepper from './Stepper';
 import exampleImage from './uploadFileImage.png';
 import './App.css'; // Importing the same CSS used in App
+import { useNavigate } from "react-router-dom";
 
 const UploadFile = () => {
   const { steps, currentStep, setCurrentStep } = useContext(StepperContext);
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setCurrentStep(1); // Set initial step to 'API Details'
@@ -35,6 +37,8 @@ const UploadFile = () => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('file', file);
+    navigate("/final");
+   
 
     try {
       const response = await fetch('http://localhost:8080/api/2', {
@@ -55,6 +59,7 @@ const UploadFile = () => {
 
         // Move to the next step
         setCurrentStep((prevStep) => Math.min(prevStep + 1, steps.length - 1));
+        navigate("/final");
       } else {
         console.error('File upload failed', response.statusText);
       }
