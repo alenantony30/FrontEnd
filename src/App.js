@@ -22,36 +22,61 @@ const isValidXml = (input) => {
 };
 
 export default function App() {
-  const [formFields, setFormFields] = useState([{ apiName: '', requestBody: '', responseBody: [''] }]);
+  const [formFields, setFormFields] = useState([{ apiName: '', requestBody: null, responseBody: [''], queryParam: null }]);
   const [product, setProduct] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isChecked, setIsChecked] = useState([false]);
   const [error, setError] = useState(null);
   const [validationMessages, setValidationMessages] = useState({});
+  const [methodType, setMethodType] = useState([]);
   const { steps, currentStep, setCurrentStep } = useContext(StepperContext);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     setCurrentStep(0); // Set initial step to 'Product Details'
-  }, [setCurrentStep]);
+
+
+
+  }, [isChecked, formFields, setCurrentStep, validationMessages]); // Ensure to include all relevant state variables in the dependency array
 
   const disabled = !formFields.every(field =>
-    field.requestBody.trim() !== '' &&
     field.responseBody.every(rb => rb.trim() !== '') &&
     field.apiName.trim() !== '') || product.trim() === '' || Object.keys(validationMessages).length > 0;
 
   const handleFormChange = (event, index, rbIndex = null) => {
     const { name, value } = event.target;
     let data = [...formFields];
+    let typeOfMethod = [...methodType];
     if (rbIndex !== null) {
       data[index].responseBody[rbIndex] = value;
+    } else if (name === 'requestBody') {
+      if (isValidJson(value) || isValidXml(value)) {
+        data[index][name] = value;
+        typeOfMethod[index] = 'POST';
+
+      }
+      else if (value === '') {
+        typeOfMethod[index] = 'GET';
+        data[index][name] = null;
+
+      }
+      else {
+
+        typeOfMethod[index] = 'GET';
+        data[index][name] = value;
+      }
+      console.log("Request Method Type : " + methodType + " value " + value);
+
     } else {
       data[index][name] = value;
     }
     setFormFields(data);
+    setMethodType(typeOfMethod);
+
 
     let messages = { ...validationMessages };
-    if (name === 'requestBody' || rbIndex !== null) {
+    if ((name === 'requestBody' && isChecked[index] === false) || rbIndex !== null) {
       const key = rbIndex !== null ? `${index}-responseBody-${rbIndex}` : `${index}-requestBody`;
       if (value.trim() === '' || isValidJson(value) || isValidXml(value)) {
         delete messages[key];
@@ -60,15 +85,17 @@ export default function App() {
       }
     }
     setValidationMessages(messages);
+    console.log("Request Method Type : " + methodType);
   };
 
   const submit = async (e) => {
     e.preventDefault();
 
-    const apiList = formFields.map(field => ({
+    const apiList = formFields.map((field, index) => ({
       apiName: field.apiName,
-      requestBody: field.requestBody,
-      responseBody: field.responseBody
+      requestBody: methodType[index] === 'GET' ? null : field.requestBody,
+      responseBody: field.responseBody,
+      queryParam: methodType[index] === 'POST' ? null : field.requestBody,
     }));
 
     const formData = { productName: product, apiList };
@@ -90,20 +117,28 @@ export default function App() {
   };
 
   const addFields = () => {
-    let object = { apiName: '', requestBody: '', responseBody: [''] };
+    let object = { apiName: '', requestBody: null, responseBody: [''], queryParam: null };
     setFormFields([...formFields, object]);
+    // let c =[...isChecked];
+    setIsChecked([...isChecked, false]);
   };
 
   const removeFields = (index) => {
     let messages = { ...validationMessages };
+    let typeOfMethod = [...methodType];
+    let data = [...formFields];
+    let toggleValue = [...isChecked];
     delete messages[`${index}-requestBody`];
     formFields[index].responseBody.forEach((_, rbIndex) => {
       delete messages[`${index}-responseBody-${rbIndex}`];
     });
     setValidationMessages(messages);
-    let data = [...formFields];
+    typeOfMethod.splice(index, 1);
     data.splice(index, 1);
+    toggleValue.splice(index, 1)
     setFormFields(data);
+    setIsChecked(toggleValue);
+    setMethodType(typeOfMethod);
   };
 
   const addResponseBody = (index) => {
@@ -120,6 +155,28 @@ export default function App() {
     data[index].responseBody.splice(rbIndex, 1);
     setFormFields(data);
   };
+
+  const handleToogleChange = (index) => {
+    let toggleValue = [...isChecked];
+    toggleValue[index] = !toggleValue[index];
+    setIsChecked(toggleValue);
+    let messages = { ...validationMessages };
+
+    // Clear validation message if toggle is ON
+    if (toggleValue[index]) {
+      delete messages[`${index}-requestBody`];
+    }
+
+    else {
+      // Toggle OFF: Perform validation
+      const requestBody = formFields[index]?.requestBody;
+      if (!(isValidJson(requestBody) || isValidXml(requestBody))) {
+        messages[`${index}-requestBody`] = 'Please enter a valid JSON or XML.';
+      }
+    }
+    setValidationMessages(messages);
+  }
+
 
   const nextStep = () => {
     setCurrentStep((prevStep) => Math.min(prevStep + 1, steps.length - 1));
@@ -149,15 +206,24 @@ export default function App() {
               <div className="requestResponseErrorComponent">
                 {validationMessages[`${index}-requestBody`] &&
                   <div className="error">{validationMessages[`${index}-requestBody`]}</div>}
-                <textarea
-                  type="json"
-                  className="requestResponse"
-                  name="requestBody"
-                  placeholder="Enter the Request Body"
-                  onChange={(event) => handleFormChange(event, index)}
-                  value={form.requestBody}
-                  required
-                />
+                <div className="textarea-container">
+                  <textarea
+                    type="json"
+                    className="requestResponse"
+                    name="requestBody"
+                    placeholder={isChecked[index] ? "Enter the Request Parameter" : "Enter the Request Body"}
+                    onChange={(event) => handleFormChange(event, index)}
+                    value={form.requestBody}
+
+                  />
+
+                  <label class="switch-toggle">
+                    <input type="checkbox"
+                      onChange={(event) => handleToogleChange(index)}
+                      checked={isChecked[index]} />
+                    <span class="slider round"></span>
+                  </label>
+                </div>
               </div>
               {form.responseBody.map((response, rbIndex) => (
                 <div key={rbIndex} className="requestResponseErrorComponent">
