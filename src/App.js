@@ -40,9 +40,15 @@ export default function App() {
 
   }, [isChecked, formFields, setCurrentStep, validationMessages]); // Ensure to include all relevant state variables in the dependency array
 
-  const disabled = !formFields.every(field =>
-    field.responseBody.every(rb => rb.trim() !== '') &&
-    field.apiName.trim() !== '') || product.trim() === '' || Object.keys(validationMessages).length > 0;
+  const disabled = formFields.some((field, index) => 
+    // If the toggle is off (isChecked is false), we check if the requestBody is valid
+    (!isChecked[index] && 
+      (field.requestBody === null || validationMessages[`${index}-requestBody`])) || 
+    // Check if apiName and responseBody are valid
+    field.apiName.trim() === '' || 
+    field.responseBody.some(rb => rb.trim() === '')
+  ) || product.trim() === '' || Object.keys(validationMessages).length > 0 || loading;
+  
 
   const handleFormChange = (event, index, rbIndex = null) => {
     const { name, value } = event.target;
@@ -157,6 +163,7 @@ export default function App() {
   };
 
   const handleToogleChange = (index) => {
+    console.log("disabled "+(disabled || loading));
     let toggleValue = [...isChecked];
     toggleValue[index] = !toggleValue[index];
     setIsChecked(toggleValue);
